@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using RougeBuilder.Model.Impl;
 
 namespace RougeBuilder;
@@ -16,11 +15,6 @@ public class RougeBuilder : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-
-        var player = new Player();
-        Debug.WriteLine(player.TestGetPosition());
-        player.TestMovePlayer(new Vector2(2, 3));
-        Debug.WriteLine(player.TestGetPosition());
     }
 
     protected override void Initialize()
