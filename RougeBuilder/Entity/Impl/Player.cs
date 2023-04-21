@@ -14,7 +14,7 @@ public class Player : AbstractEntity
         
         List<AbstractComponent> components = new () 
         {
-            new Positional(),
+            new Positional(50, 50),
             new Drawable(texture),
             new Movable(),
             new PlayerControllable(),

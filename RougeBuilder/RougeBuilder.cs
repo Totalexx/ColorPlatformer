@@ -24,12 +24,9 @@ public class RougeBuilder : Game
         base.Initialize();
     }
 
-    protected override void LoadContent()
-    {
-    }
-
     protected override void Update(GameTime gameTime)
     {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
         _gameState.Update();
         base.Update(gameTime);
     }

@@ -14,6 +14,7 @@ public class GameState : IState
     private List<ISystem> gameSystems = new()
     {
         new DrawSystem(GlobalHolder.SpriteBatch),
+        new MoveSystem(),
         new PlayerControlSystem(),
     };
 

@@ -24,7 +24,7 @@ public class DrawSystem : AbstractSystem<Drawable>
             drawable.Texture, 
             positional.Position, 
             null, 
-            Color.Transparent, 
+            Color.White, 
             positional.RotateAngle, 
             new Vector2(0, 0), 
             Vector2.One, 
@@ -34,7 +34,6 @@ public class DrawSystem : AbstractSystem<Drawable>
 
     public override void Update(IEnumerable<AbstractEntity> entities)
     {
-        
         spriteBatch.Begin();
         base.Update(entities);
         spriteBatch.End();
