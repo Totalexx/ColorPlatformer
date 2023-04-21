@@ -26,6 +26,14 @@ public abstract class AbstractEntity
     
     protected void AddComponent(AbstractComponent component)
     {
+        component.Owner = this;
+        component.CheckCorrectComponent();
         _components.Add(component.GetType(), component);
+    }
+
+    protected void AddComponents(IEnumerable<AbstractComponent> components)
+    {
+        foreach (var component in components)
+            AddComponent(component);
     }
 }

@@ -4,10 +4,12 @@ namespace RougeBuilder.Component;
 
 public abstract class AbstractComponent
 {
-    private AbstractEntity owner;
+    public AbstractEntity Owner { get; set; }
+
+    public virtual void CheckCorrectComponent() {}
 
     protected bool HasOwnerComponent<OtherComponent>() where OtherComponent : AbstractComponent
     {
-        return owner.HasComponent<OtherComponent>();
+        return Owner.HasComponent<OtherComponent>();
     }
 }

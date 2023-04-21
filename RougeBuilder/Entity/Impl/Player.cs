@@ -1,5 +1,8 @@
-using Microsoft.Xna.Framework;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
+using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Global;
 
 namespace RougeBuilder.Model.Impl;
 
@@ -7,6 +10,16 @@ public class Player : AbstractEntity
 {
     public Player()
     {
-        AddComponent(new PositionalComponent());
+        var texture = GlobalHolder.Content.Load<Texture2D>("player");
+        
+        List<AbstractComponent> components = new () 
+        {
+            new Positional(),
+            new Drawable(texture),
+            new Movable(),
+            new PlayerControllable(),
+        };
+        
+        AddComponents(components);
     }
 }
