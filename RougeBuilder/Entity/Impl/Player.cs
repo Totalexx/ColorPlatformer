@@ -8,18 +8,16 @@ namespace RougeBuilder.Model.Impl;
 
 public class Player : AbstractEntity
 {
-    public Player()
+    protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = GlobalHolder.Content.Load<Texture2D>("player");
+        var texture = Graphics.Content.Load<Texture2D>("player");
         
-        List<AbstractComponent> components = new () 
+        return new AbstractComponent[]
         {
             new Positional(50, 50),
             new Drawable(texture),
             new Movable(),
             new PlayerControllable(),
         };
-        
-        AddComponents(components);
     }
 }

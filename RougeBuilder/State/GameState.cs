@@ -1,31 +1,12 @@
-using System.Collections.Generic;
-using RougeBuilder.Global;
-using RougeBuilder.Model;
-using RougeBuilder.Model.Impl;
-using RougeBuilder.System;
-using RougeBuilder.System.Impl;
-
 namespace RougeBuilder.State;
 
-public class GameState : IState
+public abstract class GameState
 {
-    public LinkedList<AbstractEntity> AllEntities = new();
-
-    private List<ISystem> gameSystems = new()
+    protected GameState()
     {
-        new DrawSystem(GlobalHolder.SpriteBatch),
-        new MoveSystem(),
-        new PlayerControlSystem(),
-    };
-
-    public GameState()
-    {
-        AllEntities.AddLast(new Player());
+        Start();
     }
     
-    public void Update()
-    {
-        foreach (var system in gameSystems)
-            system.Update(AllEntities);
-    }
+    protected virtual void Start() {}
+    public abstract GameState Update();
 }

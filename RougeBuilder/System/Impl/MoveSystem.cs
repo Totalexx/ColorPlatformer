@@ -1,5 +1,6 @@
 using System.Numerics;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Global;
 using RougeBuilder.Model;
 
 namespace RougeBuilder.System.Impl;
@@ -14,6 +15,6 @@ public class MoveSystem : AbstractSystem<Movable>
         if (movable.Velocity.Equals(Vector2.Zero))
             return;
 
-        positional.Position += movable.Velocity;
+        positional.Position += movable.Velocity * (float)Time.DeltaTime;
     }
 }

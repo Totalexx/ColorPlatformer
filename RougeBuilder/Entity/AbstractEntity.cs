@@ -23,6 +23,13 @@ public abstract class AbstractEntity
     {
         return _components.ToImmutableDictionary();
     }
+
+    protected abstract IEnumerable<AbstractComponent> InitializeComponents();
+
+    protected AbstractEntity()
+    {
+        AddComponents(InitializeComponents());
+    }
     
     protected void AddComponent(AbstractComponent component)
     {

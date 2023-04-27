@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Global;
 using RougeBuilder.State;
 
@@ -14,25 +13,23 @@ public class RougeBuilder : Game
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
-        IsMouseVisible = true;
     }
 
     protected override void Initialize()
     {
-        GlobalHolder.Initialize(this);
-        _gameState = new GameState();
+        Graphics.Initialize(this);
+        _gameState = new RunGameState();
+        
         base.Initialize();
     }
 
     protected override void Update(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
+        
+        Time.GameTime = gameTime;
         _gameState.Update();
+        
         base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        base.Draw(gameTime);
     }
 }

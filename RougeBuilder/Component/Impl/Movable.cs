@@ -1,4 +1,4 @@
-using System.Numerics;
+using Microsoft.Xna.Framework;
 using RougeBuilder.Exception;
 
 namespace RougeBuilder.Component.Impl;

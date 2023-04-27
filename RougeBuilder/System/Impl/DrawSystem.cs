@@ -2,18 +2,14 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Global;
 using RougeBuilder.Model;
 
 namespace RougeBuilder.System.Impl;
 
 public class DrawSystem : AbstractSystem<Drawable>
 {
-    private readonly SpriteBatch spriteBatch;
-
-    public DrawSystem(SpriteBatch spriteBatch)
-    {
-        this.spriteBatch = spriteBatch;
-    }
+    private readonly SpriteBatch spriteBatch = new (Graphics.GraphicsDevice);
 
     protected override void UpdateEntity(AbstractEntity entity)
     {
