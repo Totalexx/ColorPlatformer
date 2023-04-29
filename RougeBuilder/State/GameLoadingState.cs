@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using RougeBuilder.Model;
 using RougeBuilder.Model.Impl;
 using RougeBuilder.Model.Impl.Map;
+using RougeBuilder.System.Impl;
 
 namespace RougeBuilder.State;
 
 public class GameLoadingState : GameState
 {
+    private readonly MapGenerationSystem mapGenerationSystem = new ();
+    
     private readonly LinkedList<AbstractEntity> allEntities = new ();
     private bool _isGameLoaded = false;
     
@@ -14,6 +17,9 @@ public class GameLoadingState : GameState
     {
         allEntities.AddLast(new Player());
         allEntities.AddLast(new Map());
+        
+        mapGenerationSystem.Update(allEntities);
+        
         _isGameLoaded = true;
     }
 

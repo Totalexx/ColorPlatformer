@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using RougeBuilder.Global;
+using System.Diagnostics;
 using RougeBuilder.Model;
-using RougeBuilder.Model.Impl;
 using RougeBuilder.System;
 using RougeBuilder.System.Impl;
 
@@ -13,6 +12,7 @@ public class OnGameState : GameState
     
     private readonly List<ISystem> gameSystems = new()
     {
+        new MapDrawSystem(),
         new DrawSystem(),
         new MoveSystem(),
         new PlayerControlSystem(),
@@ -22,7 +22,12 @@ public class OnGameState : GameState
     {
         allEntities = gameEntities;
     }
-    
+
+    protected override void Start()
+    {
+        Debug.WriteLine("OnGame");
+    }
+
     public override GameState Update()
     {
         foreach (var system in gameSystems)

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component.Impl;
@@ -11,13 +10,12 @@ namespace RougeBuilder.System.Impl;
 public class MapDrawSystem : AbstractSystem<MapMarker>
 {
 
-    private SpriteBatch mapSpriteBatch = new (Graphics.GraphicsDevice);
+    private readonly SpriteBatch mapSpriteBatch = Graphics.SpriteBatch;
 
     protected override void UpdateEntity(AbstractEntity entity)
     {
         var tiles = entity.GetComponent<EntityCollector<Tile>>().Collection;
 
-        mapSpriteBatch.Begin();
         foreach (var tile in tiles)
         {
             var positional = tile.GetComponent<Positional>();
@@ -34,7 +32,5 @@ public class MapDrawSystem : AbstractSystem<MapMarker>
                 SpriteEffects.None, 
                 drawable.LayerDepth);
         }
-            
-        mapSpriteBatch.End();
     }
 }

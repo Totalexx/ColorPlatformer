@@ -5,5 +5,5 @@ namespace RougeBuilder.Component.Impl;
 
 public class EntityCollector<T> : AbstractComponent
 {
-    public LinkedList<T> Collection;
+    public readonly LinkedList<T> Collection = new ();
 }

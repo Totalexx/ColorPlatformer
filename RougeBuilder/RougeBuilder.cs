@@ -25,11 +25,13 @@ public class RougeBuilder : Game
 
     protected override void Update(GameTime gameTime)
     {
+        Graphics.SpriteBatch.Begin();
         GraphicsDevice.Clear(Color.CornflowerBlue);
         
         Time.GameTime = gameTime;
-        _gameState.Update();
+        _gameState = _gameState.Update();
         
+        Graphics.SpriteBatch.End();
         base.Update(gameTime);
     }
 }

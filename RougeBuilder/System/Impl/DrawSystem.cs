@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component.Impl;
@@ -9,7 +8,7 @@ namespace RougeBuilder.System.Impl;
 
 public class DrawSystem : AbstractSystem<Drawable>
 {
-    private readonly SpriteBatch spriteBatch = new (Graphics.GraphicsDevice);
+    private readonly SpriteBatch spriteBatch = Graphics.SpriteBatch;
 
     protected override void UpdateEntity(AbstractEntity entity)
     {
@@ -26,12 +25,5 @@ public class DrawSystem : AbstractSystem<Drawable>
             Vector2.One, 
             SpriteEffects.None, 
             drawable.LayerDepth);
-    }
-
-    public override void Update(IEnumerable<AbstractEntity> entities)
-    {
-        spriteBatch.Begin();
-        base.Update(entities);
-        spriteBatch.End();
     }
 }

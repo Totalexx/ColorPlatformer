@@ -1,5 +1,3 @@
-using NotImplementedException = System.NotImplementedException;
-
 namespace RougeBuilder.State;
 
 public class RunGameState : GameState
