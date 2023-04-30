@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.ViewportAdapters;
 using RougeBuilder.Global;
 using RougeBuilder.State;
 
@@ -8,6 +10,8 @@ public class RougeBuilder : Game
 {
     private GraphicsDeviceManager _graphics;
     private GameState _gameState;
+
+    private BoxingViewportAdapter viewportAdapter;
     
     public RougeBuilder()
     {
@@ -25,13 +29,12 @@ public class RougeBuilder : Game
 
     protected override void Update(GameTime gameTime)
     {
-        Graphics.SpriteBatch.Begin();
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        Graphics.DrawBegin();
         
         Time.GameTime = gameTime;
         _gameState = _gameState.Update();
         
-        Graphics.SpriteBatch.End();
+        Graphics.DrawEnd();
         base.Update(gameTime);
     }
 }
