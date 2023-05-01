@@ -16,6 +16,7 @@ public class OnGameState : GameState
         new DrawSystem(),
         new MoveSystem(),
         new PlayerControlSystem(),
+        new CameraFollowSystem()
     };
     
     public OnGameState(LinkedList<AbstractEntity> gameEntities)

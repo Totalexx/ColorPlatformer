@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Global;
 using RougeBuilder.Model;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 

@@ -47,8 +47,8 @@ public static class Graphics
         var viewport = new BoxingViewportAdapter(Game.Window, GraphicsDevice, WindowWidth, WindowHeight);
         Camera = new OrthographicCamera(viewport)
         {
-            Zoom = 2,
-            Position = new Vector2(0, 0)
+            Position = new Vector2(0, 0),
+            Zoom = 2
         };
     }
     

@@ -18,6 +18,7 @@ public class Player : AbstractEntity
             new Drawable(texture),
             new Movable(),
             new PlayerControllable(),
+            new CameraFollows()
         };
     }
 }
