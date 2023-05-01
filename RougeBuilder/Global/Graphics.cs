@@ -32,9 +32,10 @@ public static class Graphics
     public static void DrawBegin()
     {
         GraphicsDevice.Clear(Color.Black);
-        SpriteBatch.Begin(
-            samplerState: SamplerState.PointWrap, 
-            transformMatrix: Camera.GetViewMatrix());
+        // SpriteBatch.Begin(
+        //     samplerState: SamplerState.PointWrap, 
+        //     transformMatrix: Camera.GetViewMatrix());
+        SpriteBatch.Begin();
     }
 
     public static void DrawEnd()
@@ -44,12 +45,12 @@ public static class Graphics
     
     private static void CreateCamera()
     {
-        var viewport = new BoxingViewportAdapter(Game.Window, GraphicsDevice, WindowWidth, WindowHeight);
-        Camera = new OrthographicCamera(viewport)
-        {
-            Position = new Vector2(0, 0),
-            Zoom = 2
-        };
+        // var viewport = new BoxingViewportAdapter(Game.Window, GraphicsDevice, WindowWidth, WindowHeight);
+        // Camera = new OrthographicCamera(viewport)
+        // {
+        //     Position = new Vector2(0, 0),
+        //     Zoom = 0.8f
+        // };
     }
     
     private static void SetGraphicsVariables()

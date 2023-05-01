@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 using RougeBuilder.Global;
 using RougeBuilder.State;
@@ -37,4 +36,5 @@ public class RougeBuilder : Game
         Graphics.DrawEnd();
         base.Update(gameTime);
     }
+
 }

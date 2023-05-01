@@ -14,14 +14,13 @@ public class DrawSystem : AbstractSystem<Drawable>
     {
         var drawable = entity.GetComponent<Drawable>();
         var positional = entity.GetComponent<Positional>();
-        
         spriteBatch.Draw(
             drawable.Texture, 
             positional.Position, 
             null, 
             Color.White, 
             positional.RotateAngle, 
-            new Vector2(0, 0), 
+            new Vector2(drawable.Texture.Width / 2, drawable.Texture.Height / 2), 
             Vector2.One, 
             SpriteEffects.None, 
             drawable.LayerDepth);
