@@ -20,6 +20,7 @@ public class GameLoadingState : GameState
     private bool _isGameLoaded = false;
 
     private BinaryTree<Rectangle> bsp;
+    private List<Rectangle> rooms;
 
     protected override void Start()
     {
@@ -27,7 +28,8 @@ public class GameLoadingState : GameState
         allEntities.AddLast(new Map());
         
         mapGenerationSystem.Update(allEntities);
-        bsp = mapGenerationSystem.BSP();
+        rooms = mapGenerationSystem.GenerateRoomsTest();
+        bsp = mapGenerationSystem.BSP;
     }
 
     public override GameState Update()
@@ -39,6 +41,13 @@ public class GameLoadingState : GameState
             var r = new Rectangle(rectangle.X * 16, rectangle.Y * 16, rectangle.Width * 16, rectangle.Height * 16);
             Graphics.SpriteBatch.DrawRectangle(r, Color.Aqua);
         }
+
+        foreach (var room in rooms)
+        {
+            var r = new Rectangle(room.X * 16, room.Y * 16, room.Width * 16, room.Height * 16);
+            Graphics.SpriteBatch.FillRectangle(r, Color.Gray);
+        }
+        
         return this;
     }
 }

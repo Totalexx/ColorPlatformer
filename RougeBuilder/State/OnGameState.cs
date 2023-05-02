@@ -12,11 +12,11 @@ public class OnGameState : GameState
     
     private readonly List<ISystem> gameSystems = new()
     {
+        new PlayerControlSystem(),
+        new MoveSystem(),
+        new CameraFollowSystem(),
         new MapDrawSystem(),
         new DrawSystem(),
-        new MoveSystem(),
-        new PlayerControlSystem(),
-        new CameraFollowSystem()
     };
     
     public OnGameState(LinkedList<AbstractEntity> gameEntities)
