@@ -20,14 +20,14 @@ public class BinaryTree<T> : IEnumerable<T>
         return CountLeafRecursion(Root);
     }
 
-    public IEnumerable<T> GetLeafs()
+    public IEnumerable<Node<T>> GetLeafs()
     {
-        var leafs = new LinkedList<T>();
+        var leafs = new LinkedList<Node<T>>();
         AddLeaf(leafs, Root);
         return leafs;
     }
 
-    private void AddLeaf(LinkedList<T> nodes, Node<T> node)
+    private void AddLeaf(LinkedList<Node<T>> nodes, Node<T> node)
     {
         if (node == null)
             return;
@@ -38,7 +38,7 @@ public class BinaryTree<T> : IEnumerable<T>
             
             return;
         }
-        nodes.AddLast(node.Value);
+        nodes.AddLast(node);
     }
     
     private int CountLeafRecursion(Node<T> node)
@@ -90,6 +90,8 @@ public class Node<T>
     public T Value { get; set; }
     public Node<T>[] Children { get; } = new Node<T>[2];
 
+    public Node<T> Parent { get; private set; }
+
     public Node<T> Left => Children[0];
     public Node<T> Right => Children[1];
     public bool HasChildren => Left != null || Right != null;
@@ -106,5 +108,25 @@ public class Node<T>
         if (CountChild == 2)
             throw new InvalidOperationException("Node can't has more two children");
         Children[CountChild++] = child;
+        child.Parent = this;
+    }
+
+    private bool Equals(Node<T> other)
+    {
+        return EqualityComparer<T>.Default.Equals(Value, other.Value) 
+               && Equals(Children, other.Children) 
+               && Equals(Parent, other.Parent);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return obj.GetType() == GetType() && Equals((Node<T>)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Value, Children, Parent);
     }
 }
