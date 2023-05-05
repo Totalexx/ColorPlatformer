@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using RougeBuilder.Global;
+using RougeBuilder.Model.Impl.Map;
 using RougeBuilder.Utils;
 
 namespace RougeBuilder.System.Impl;
@@ -12,15 +15,44 @@ public class RoomGenerator
 
     private readonly Random random = new ();
     
-    public Dictionary<Node<Rectangle>, Rectangle> GenerateRooms(IEnumerable<Node<Rectangle>> roomAreas)
-    {
-        var rooms = new Dictionary<Node<Rectangle>, Rectangle>();
-        foreach (var area in roomAreas)
-            rooms[area] = GenerateOneRoom(area.Value);
+    public Dictionary<Node<Rectangle>, Rectangle> Rooms { get; private set; }
 
-        return rooms;
+    public void GenerateRooms(IEnumerable<Node<Rectangle>> roomAreas)
+    {
+        var nodeAndRoom = new Dictionary<Node<Rectangle>, Rectangle>();
+
+        foreach (var area in roomAreas)
+            nodeAndRoom[area] = GenerateOneRoom(area.Value);
+
+        Rooms = nodeAndRoom;
     }
 
+    public LinkedList<Tile> GenerateTiles()
+    {
+        var roomsTiles = new LinkedList<Tile>();
+        foreach (var roomAndArea in Rooms)
+            foreach (var tile in GenerateOneTileRoom(roomAndArea.Value))
+                roomsTiles.AddLast(tile);
+
+        return roomsTiles;
+    }
+
+    private IEnumerable<Tile> GenerateOneTileRoom(Rectangle room)
+    {
+        var tiles = new LinkedList<Tile>();
+        for (var x = room.X; x < room.X + room.Width; x++)
+        {
+            for (var y = room.Y; y < room.Y + room.Height; y++)
+            {
+                var position = new Vector2(x * MapGenerationSystem.TILE_WIDTH, y * MapGenerationSystem.TILE_HEIGHT);
+                var texture = Graphics.Content.Load<Texture2D>("map/floor");
+                tiles.AddLast(new Tile(position, texture));
+            }
+        }
+
+        return tiles;
+    }
+    
     private Rectangle GenerateOneRoom(Rectangle roomArea)
     {
         var minHeight = 0;

@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component.Impl;
-using RougeBuilder.Global;
 using RougeBuilder.Model;
 using RougeBuilder.Model.Impl.Map;
 using RougeBuilder.Utils;
@@ -13,9 +10,8 @@ namespace RougeBuilder.System.Impl;
 
 public class MapGenerationSystem : AbstractSystem<MapMarker>
 {
-
-    private const int TILE_WIDTH = 16;
-    private const int TILE_HEIGHT = 16;
+    public const int TILE_WIDTH = 16;
+    public const int TILE_HEIGHT = 16;
 
     private readonly MapAreaGenerator areaGenerator = new();
     private readonly RoomGenerator roomGenerator = new();
@@ -24,31 +20,26 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
     public Dictionary<Node<Rectangle>, Rectangle> Room;
     public LinkedList<LinkedList<Vector2>> Corr;
     public BinaryTree<Rectangle> BSP;
-
+    
     protected override void UpdateEntity(AbstractEntity entity)
     {
-        var mapTiles = entity.GetComponent<EntityCollector<Tile>>().Collection;
-        for (var i = 0; i < 50; i++)
-        {
-            for (var j = 0; j < 50; j++)
-            {
-                var tile = new Tile();
-                tile.GetComponent<Positional>().Position = new Vector2(i * TILE_WIDTH , j * TILE_HEIGHT);
-                tile.GetComponent<Drawable>().Texture = Graphics.Content.Load<Texture2D>("map/floor");
-                tile.GetComponent<Drawable>().LayerDepth = 0;
-                mapTiles.AddLast(tile);
-            }
-        }
+        GenerateMap();
+        var roomTiles = roomGenerator.GenerateTiles();
+        var corridorTiles = corridorGenerator.GenerateTiles();
+
+        foreach (var tile in roomTiles)
+            entity.GetComponent<EntityCollector<Tile>>().Collection.AddLast(tile);            
+
+        foreach (var tile in corridorTiles)
+            entity.GetComponent<EntityCollector<Tile>>().Collection.AddLast(tile); 
     }
 
-    public void TestGenerate()
+    private void GenerateMap()
     {
-        var bspTree = areaGenerator.GenerateBSPTree();
-        var rooms = roomGenerator.GenerateRooms(bspTree.GetLeafs());
-        var corridors = corridorGenerator.GenerateCorridors(bspTree, rooms);
-
-        Corr = corridors;
-        Room = rooms;
-        BSP = bspTree;
+        areaGenerator.GenerateBSPTree();
+        roomGenerator.GenerateRooms(areaGenerator.AreaTree.GetLeafsValues());
+        
+        var rooms = roomGenerator.Rooms.Select(room => room.Value);
+        corridorGenerator.GenerateSimpleCorridors(rooms);
     }
 }

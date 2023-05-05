@@ -45,12 +45,12 @@ public static class Graphics
     
     private static void CreateCamera()
     {
-        // var viewport = new BoxingViewportAdapter(Game.Window, GraphicsDevice, WindowWidth, WindowHeight);
-        // Camera = new OrthographicCamera(viewport)
-        // {
-        //     Position = new Vector2(0, 0),
-        //     Zoom = 0.8f
-        // };
+        var viewport = new BoxingViewportAdapter(Game.Window, GraphicsDevice, WindowWidth, WindowHeight);
+        Camera = new OrthographicCamera(viewport)
+        {
+            Position = new Vector2(0, 0),
+            Zoom = 0.8f
+        };
     }
     
     private static void SetGraphicsVariables()

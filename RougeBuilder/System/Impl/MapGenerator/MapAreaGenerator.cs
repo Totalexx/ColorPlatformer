@@ -6,20 +6,22 @@ namespace RougeBuilder.System.Impl;
 
 public class MapAreaGenerator
 {
-    private const int MAP_TILES_WIDTH = 32;
-    private const int MAP_TILES_HEIGHT = 32;
+    public BinaryTree<Rectangle> AreaTree { get; private set; } 
+    
+    private const int MAP_TILES_WIDTH = 16;
+    private const int MAP_TILES_HEIGHT = 16;
 
-    private const int MIN_AREA_S = 128;
+    private const int MIN_AREA_S = 64;
     private const float ASPECT_RATIO_AREA = 0.40f;
 
     private readonly Random random = new ();
-    
-    public BinaryTree<Rectangle> GenerateBSPTree()
+
+    public void GenerateBSPTree()
     {
         var mapBounds = new Rectangle(0, 0, MAP_TILES_WIDTH, MAP_TILES_HEIGHT);
         var BSPTree = new BinaryTree<Rectangle>(SplitRectangle(mapBounds));
 
-        return BSPTree;
+        AreaTree = BSPTree;
     }
 
     private Node<Rectangle> SplitRectangle(Rectangle area)

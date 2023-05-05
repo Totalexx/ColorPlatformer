@@ -20,7 +20,7 @@ public class BinaryTree<T> : IEnumerable<T>
         return CountLeafRecursion(Root);
     }
 
-    public IEnumerable<Node<T>> GetLeafs()
+    public IEnumerable<Node<T>> GetLeafsValues()
     {
         var leafs = new LinkedList<Node<T>>();
         AddLeaf(leafs, Root);
