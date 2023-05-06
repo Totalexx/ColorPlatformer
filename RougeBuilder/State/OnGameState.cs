@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended;
+using RougeBuilder.Global;
 using RougeBuilder.Model;
 using RougeBuilder.System;
 using RougeBuilder.System.Impl;
@@ -9,7 +13,7 @@ namespace RougeBuilder.State;
 public class OnGameState : GameState
 {
     private readonly LinkedList<AbstractEntity> allEntities = new();
-    
+
     private readonly List<ISystem> gameSystems = new()
     {
         new PlayerControlSystem(),
@@ -18,7 +22,7 @@ public class OnGameState : GameState
         new MapDrawSystem(),
         new DrawSystem(),
     };
-    
+
     public OnGameState(LinkedList<AbstractEntity> gameEntities)
     {
         allEntities = gameEntities;
@@ -33,8 +37,7 @@ public class OnGameState : GameState
     {
         foreach (var system in gameSystems)
             system.Update(allEntities);
-        
+
         return this;
     }
-    
 }

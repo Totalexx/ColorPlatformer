@@ -27,32 +27,4 @@ public class GameLoadingState : GameState
         
         return this;
     }
-
-    /*private void DrawDebugInformation()
-    {
-         BinaryTree<Rectangle> bsp = default;
-         List<Rectangle> rooms = default;
-         LinkedList<LinkedList<Vector2>> corridors = default;
-     
-         foreach (var rectangle in bsp.GetLeafsValues()) 
-         {
-            var r = new Rectangle(rectangle.Value.X * 16, rectangle.Value.Y * 16, rectangle.Value.Width * 16, rectangle.Value.Height * 16);
-            Graphics.SpriteBatch.DrawRectangle(r, Color.Aqua);
-        }
-        
-        foreach (var corridor in corridors)
-        {
-            foreach (var tile in corridor)
-            {
-                var r = new Rectangle((int)tile.X * 16, (int)tile.Y * 16, 16, 16);
-                Graphics.SpriteBatch.FillRectangle(r, Color.Bisque);
-            }
-        }
-        
-        foreach (var room in rooms)
-        {
-            var r = new Rectangle(room.X * 16, room.Y * 16, room.Width * 16, room.Height * 16);
-            Graphics.SpriteBatch.FillRectangle(r, Color.Gray);
-        }
-    }*/
 }

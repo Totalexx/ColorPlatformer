@@ -10,10 +10,10 @@ namespace RougeBuilder.System.Impl;
 
 public class RoomGenerator
 {
-    private const int MIN_ROOM_S = 16;
+    private const int MIN_ROOM_S = 128;
     private const float ASPECT_RATIO_ROOM = 1.1f;
 
-    private readonly Random random = new ();
+    private readonly Random random = new (42);
     
     public Dictionary<Node<Rectangle>, Rectangle> Rooms { get; private set; }
 
@@ -44,11 +44,34 @@ public class RoomGenerator
         {
             for (var y = room.Y; y < room.Y + room.Height; y++)
             {
-                var position = new Vector2(x * MapGenerationSystem.TILE_WIDTH, y * MapGenerationSystem.TILE_HEIGHT);
-                var texture = Graphics.Content.Load<Texture2D>("map/floor");
-                tiles.AddLast(new Tile(position, texture));
+                var position = new Vector2(x, y) * MapTiles.TileSize;
+                tiles.AddLast(new Tile(position, MapTiles.Floor));
             }
         }
+
+        for (var x = room.X; x < room.X + room.Width; x++)
+        {
+            var positionTop = new Vector2(x, room.Y - 1) * MapTiles.TileSize;
+            var positionBottom = new Vector2(x , room.Y + room.Height) * MapTiles.TileSize;
+            tiles.AddLast(new Tile(positionTop, MapTiles.WallTop));
+            tiles.AddLast(new Tile(positionBottom, MapTiles.WallTop));
+        }
+        for (var y = room.Y; y < room.Y + room.Height; y++)
+        {
+            var positionLeft = new Vector2(room.X-1, y) * MapTiles.TileSize;
+            var positionRight = new Vector2(room.X + room.Width, y) * MapTiles.TileSize;
+            tiles.AddLast(new Tile(positionLeft, MapTiles.WallLeft));
+            tiles.AddLast(new Tile(positionRight, MapTiles.WallRight));
+        }
+
+        var positionTopLeft = new Vector2(room.X-1, room.Y-1) * MapTiles.TileSize;
+        var positionTopRight = new Vector2(room.X + room.Width, room.Y - 1) * MapTiles.TileSize;
+        var positionBottomLeft = new Vector2(room.X-1, room.Y + room.Height) * MapTiles.TileSize;
+        var positionBottomRight = new Vector2(room.X + room.Width, room.Y + room.Height) * MapTiles.TileSize;
+        tiles.AddLast(new Tile(positionTopLeft, MapTiles.WallLeftTop));
+        tiles.AddLast(new Tile(positionTopRight, MapTiles.WallRightTop));
+        tiles.AddLast(new Tile(positionBottomLeft, MapTiles.WallLeftBottom));
+        tiles.AddLast(new Tile(positionBottomRight, MapTiles.WallRightBottom));
 
         return tiles;
     }
@@ -72,8 +95,8 @@ public class RoomGenerator
         var maxWidth = roomArea.Width - 1;
         var maxHeight = roomArea.Height - 1; 
 
-        var width = random.Next(minWidth, maxWidth);
-        var height = random.Next(minHeight, maxHeight);
+        var width = random.Next(minWidth > maxWidth ? maxWidth : minWidth, maxWidth);
+        var height = random.Next(minHeight > maxHeight ? maxHeight : minHeight, maxHeight);
 
         var maxX = roomArea.X + maxWidth - width;
         var maxY = roomArea.Y + maxHeight - height;
