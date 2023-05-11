@@ -8,13 +8,13 @@ public class MapAreaGenerator
 {
     public BinaryTree<Rectangle> AreaTree { get; private set; } 
     
-    private const int MAP_TILES_WIDTH = 32;
-    private const int MAP_TILES_HEIGHT = 32;
+    private const int MAP_TILES_WIDTH = 160;
+    private const int MAP_TILES_HEIGHT = 160;
 
-    private const int MIN_AREA_S = 512;
+    private const int MIN_AREA_S = 2048;
     private const float ASPECT_RATIO_AREA = 0.40f;
 
-    private readonly Random random = new (42);
+    private readonly Random random = new ();
 
     public void GenerateBSPTree()
     {

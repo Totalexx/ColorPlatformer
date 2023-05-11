@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Model;
 using RougeBuilder.Model.Impl.Map;
@@ -7,6 +9,8 @@ namespace RougeBuilder.System.Impl;
 
 public class MapGenerationSystem : AbstractSystem<MapMarker>
 {
+    private readonly Dictionary<Vector2, Tile> mapTiles = new(); 
+    
     private readonly MapAreaGenerator areaGenerator = new();
     private readonly RoomGenerator roomGenerator = new();
     private readonly CorridorGenerator corridorGenerator = new();
@@ -14,14 +18,21 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
     protected override void UpdateEntity(AbstractEntity entity)
     {
         GenerateMap();
-        var roomTiles = roomGenerator.GenerateTiles();
-        var corridorTiles = corridorGenerator.GenerateTiles();
+        SetMapTiles(roomGenerator.GenerateTiles());
+        SetMapTiles(corridorGenerator.GenerateFloorTiles());
+        AddTilesToMap(entity);
+    }
 
-        foreach (var tile in roomTiles)
-            entity.GetComponent<EntityCollector<Tile>>().Collection.AddLast(tile);            
+    private void SetMapTiles(Dictionary<Vector2, Tile> tiles)
+    {
+        foreach (var tile in tiles)
+            mapTiles[tile.Key] = tile.Value;
+    }
 
-        foreach (var tile in corridorTiles)
-            entity.GetComponent<EntityCollector<Tile>>().Collection.AddLast(tile); 
+    private void AddTilesToMap(AbstractEntity entity)
+    {
+        foreach (var tile in mapTiles.Select(t => t.Value))
+            entity.GetComponent<EntityCollector<Tile>>().Collection.AddLast(tile);
     }
 
     private void GenerateMap()

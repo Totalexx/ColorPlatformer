@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
 using RougeBuilder.Model.Impl.Map;
 using RougeBuilder.Utils;
@@ -11,7 +12,8 @@ namespace RougeBuilder.System.Impl;
 public class CorridorGenerator
 {
     public LinkedList<LinkedList<Vector2>> Corridors { get; private set; }
-    
+    public HashSet<Vector2> BoundaryTiles { get; private set; }
+
     private const int CORRIDOR_WIDTH = 3;
     private const int HALF_CORRIDOR_WIDTH = CORRIDOR_WIDTH / 2;
 
@@ -37,20 +39,21 @@ public class CorridorGenerator
         Corridors = corridors;
     }
 
-    public LinkedList<Tile> GenerateTiles()
+    public Dictionary<Vector2, Tile> GenerateFloorTiles()
     {
-        var tiles = new LinkedList<Tile>();
+        var tiles = new Dictionary<Vector2, Tile>();
         foreach (var corridor in Corridors)
             foreach (var tile in GenerateOneTileCorridor(corridor))
-                tiles.AddLast(tile);
+                tiles[tile.Key] = tile.Value;
 
         return tiles;
     }
 
-    private LinkedList<Tile> GenerateOneTileCorridor(LinkedList<Vector2> corridor)
+    private Dictionary<Vector2, Tile> GenerateOneTileCorridor(LinkedList<Vector2> corridor)
     {
-        var tiles = new LinkedList<Tile>();
-
+        var tiles = new Dictionary<Vector2, Tile>();
+        var boundaryTiles = new HashSet<Vector2>(); 
+        
         var isFirst = true;
         var isSecond = false;
         Vector2 prevStep = default;
@@ -64,56 +67,39 @@ public class CorridorGenerator
                 isSecond = true;
                 continue;
             }
-
-            if (prevStep.Y == step.Y)
+            
+            for (var i = 0; i < CORRIDOR_WIDTH; i++)
             {
-                for (var i = 0; i < CORRIDOR_WIDTH; i++)
-                    tiles.AddLast(CreateCorridorTile(step.X, step.Y - HALF_CORRIDOR_WIDTH + i));
-                
-                // var wallTop = new Vector2(step.X, step.Y  - HALF_CORRIDOR_WIDTH - 1) * MapTiles.TileSize;
-                // var wallBottom = new Vector2(step.X, step.Y + HALF_CORRIDOR_WIDTH + 1) * MapTiles.TileSize;
-                //
-                // tiles.AddLast(new Tile(wallTop, MapTiles.WallTop));
-                // tiles.AddLast(new Tile(wallBottom, MapTiles.WallTop));
-            }
-            else
-            {
-                
-                for (var i = 0; i < CORRIDOR_WIDTH; i++)
-                    tiles.AddLast(CreateCorridorTile(step.X - HALF_CORRIDOR_WIDTH + i, step.Y));
+                var dx = 0;
+                var dy = 0;
+                if (prevStep.Y == step.Y)
+                    dy = -HALF_CORRIDOR_WIDTH + i;
+                else
+                    dx = -HALF_CORRIDOR_WIDTH + i;
 
-                // var wallLeft = new Vector2(step.X - HALF_CORRIDOR_WIDTH - 1, step.Y) * MapTiles.TileSize;
-                // var wallRight = new Vector2(step.X + HALF_CORRIDOR_WIDTH + 1, step.Y) * MapTiles.TileSize;
-                //
-                // tiles.AddLast(new Tile(wallLeft, MapTiles.WallLeft));
-                // tiles.AddLast(new Tile(wallRight, MapTiles.WallRight));
+                var position = new Vector2(step.X + dx, step.Y + dy) * MapTiles.TileSize;
+                tiles[position] = new Tile(position, MapTiles.Floor);
+
+                if (dx != 0 || dy != 0)
+                    boundaryTiles.Add(position);
+                
+                if (!isSecond) continue;
+                var positionPrev = new Vector2(prevStep.X + dx, prevStep.Y + dy) * MapTiles.TileSize;
+                tiles[positionPrev] = new Tile(positionPrev, MapTiles.Floor);
+                
+                if (dx != 0 || dy != 0)
+                    boundaryTiles.Add(positionPrev);
             }
             
             if (isSecond)
-            {
-                if (prevStep.Y == step.Y)
-                {
-                    for (var i = 0; i < CORRIDOR_WIDTH; i++)
-                        tiles.AddLast(CreateCorridorTile(prevStep.X, prevStep.Y - HALF_CORRIDOR_WIDTH + i));
-                }
-                else
-                    for (var i = 0; i < CORRIDOR_WIDTH; i++)
-                        tiles.AddLast(CreateCorridorTile(prevStep.X - HALF_CORRIDOR_WIDTH + i, prevStep.Y));
                 isSecond = false;
-            }
             
             prevStep = step;
-            
         }
 
+        BoundaryTiles = boundaryTiles;
+        
         return tiles;
-    }
-
-    private Tile CreateCorridorTile(float x, float y)
-    {
-        var position = new Vector2(x, y) * MapTiles.TileSize;
-        var texture = MapTiles.Floor;
-        return new Tile(position, texture);
     }
 
     private LinkedList<Vector2> GenerateOneCorridor(Dictionary<Rectangle, HashSet<Vector2>> allBounds, Rectangle firstRoom, Rectangle secondRoom)
@@ -121,12 +107,12 @@ public class CorridorGenerator
         var firstRoomCenter = firstRoom.Center.ToVector2();
         var secondRoomCenter = secondRoom.Center.ToVector2();
         var corridorPath = new LinkedList<Vector2>();
-
-        var bounds = allBounds.Where(r => r.Key != firstRoom && r.Key != secondRoom).SelectMany(r => r.Value);
-        var hashSetBounds = new HashSet<Vector2>(bounds);
+        
+        // var bounds = allBounds.Where(r => r.Key != firstRoom && r.Key != secondRoom).SelectMany(r => r.Value);
+        // var hashSetBounds = new HashSet<Vector2>(bounds);
 
         var roomsPath = Searcher
-            .FindWidthPathTo(firstRoomCenter, secondRoomCenter, walls: hashSetBounds)
+            .FindWidthPathTo(firstRoomCenter, secondRoomCenter)
             .Where(step => !(firstRoom.Contains(step) || secondRoom.Contains(step)));
         
         foreach (var step in roomsPath)

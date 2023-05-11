@@ -12,7 +12,10 @@ public class Tile : AbstractEntity
     public Tile(Vector2 position, Texture2D texture)
     {
         GetComponent<Positional>().Position = position;
-        GetComponent<Drawable>().Texture = texture;
+        
+        var drawable = GetComponent<Drawable>();
+        drawable.Texture = texture;
+        drawable.LayerDepth = 0.1f;
     }
     
     protected override IEnumerable<AbstractComponent> InitializeComponents()

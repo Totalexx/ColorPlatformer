@@ -41,7 +41,6 @@ public static class Graphics
             samplerState: SamplerState.PointWrap, 
             transformMatrix: Camera.GetViewMatrix());
         // SpriteBatch.Begin();
-        
     }
 
     public static void DrawEnd()

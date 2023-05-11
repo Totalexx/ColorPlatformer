@@ -14,7 +14,7 @@ public class Player : AbstractEntity
         
         return new AbstractComponent[]
         {
-            new Positional(50, 50),
+            new Positional(1000, 1000),
             new Drawable(texture),
             new Movable(),
             new PlayerControllable(),

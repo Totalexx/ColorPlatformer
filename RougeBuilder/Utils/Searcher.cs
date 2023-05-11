@@ -23,7 +23,7 @@ public static class Searcher
         stepQueue.Enqueue(from);
         visitedPoints.Add(from);
         
-        while (stepQueue.Count <= 10000)
+        while (stepQueue.Count <= 10000 && stepQueue.Count != 0)
         {
             if (trackToFrom.ContainsKey(to))
                 return GetPathFromTrack(trackToFrom, to);
@@ -51,7 +51,7 @@ public static class Searcher
             }
         }
 
-        return null;
+        return new LinkedList<Vector2>();
     }
 
     private static LinkedList<Vector2> GetPathFromTrack(Dictionary<Vector2, Vector2?> track, Vector2 to)

@@ -4,7 +4,7 @@ using RougeBuilder.Global;
 
 namespace RougeBuilder.System.Impl;
 
-public class MapTiles
+public static class MapTiles
 {
     public static readonly Vector2 TileSize = new (16, 16);
 
