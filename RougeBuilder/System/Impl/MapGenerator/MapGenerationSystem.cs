@@ -14,12 +14,15 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
     private readonly MapAreaGenerator areaGenerator = new();
     private readonly RoomGenerator roomGenerator = new();
     private readonly CorridorGenerator corridorGenerator = new();
-
+    private WallGenerator wallGenerator;
+    
     protected override void UpdateEntity(AbstractEntity entity)
     {
         GenerateMap();
         SetMapTiles(roomGenerator.GenerateTiles());
         SetMapTiles(corridorGenerator.GenerateFloorTiles());
+        var walls = GenerateWalls();
+        SetMapTiles(walls);
         AddTilesToMap(entity);
     }
 
@@ -42,5 +45,19 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
         
         var rooms = roomGenerator.Rooms.Select(room => room.Value);
         corridorGenerator.GenerateSimpleCorridors(rooms);
+    }
+
+    private Dictionary<Vector2, Tile> GenerateWalls()
+    {
+        var boundaryTiles = new HashSet<Vector2>();
+        
+        var corridorBoundaryTiles = corridorGenerator.BoundaryTiles;
+        var roomBoundaryTiles = roomGenerator.BoundaryTiles;
+
+        boundaryTiles.UnionWith(corridorBoundaryTiles);
+        boundaryTiles.UnionWith(roomBoundaryTiles);
+        
+        wallGenerator = new WallGenerator(mapTiles, boundaryTiles);
+        return wallGenerator.GenerateWalls();
     }
 }

@@ -42,6 +42,8 @@ public class CorridorGenerator
     public Dictionary<Vector2, Tile> GenerateFloorTiles()
     {
         var tiles = new Dictionary<Vector2, Tile>();
+        BoundaryTiles = new HashSet<Vector2>();
+        
         foreach (var corridor in Corridors)
             foreach (var tile in GenerateOneTileCorridor(corridor))
                 tiles[tile.Key] = tile.Value;
@@ -77,17 +79,17 @@ public class CorridorGenerator
                 else
                     dx = -HALF_CORRIDOR_WIDTH + i;
 
-                var position = new Vector2(step.X + dx, step.Y + dy) * MapTiles.TileSize;
+                var position = new Vector2(step.X + dx, step.Y + dy);
                 tiles[position] = new Tile(position, MapTiles.Floor);
 
                 if (dx != 0 || dy != 0)
                     boundaryTiles.Add(position);
                 
                 if (!isSecond) continue;
-                var positionPrev = new Vector2(prevStep.X + dx, prevStep.Y + dy) * MapTiles.TileSize;
+                var positionPrev = new Vector2(prevStep.X + dx, prevStep.Y + dy);
                 tiles[positionPrev] = new Tile(positionPrev, MapTiles.Floor);
                 
-                if (dx != 0 || dy != 0)
+                if (dx != 0 || dy != 0 || CORRIDOR_WIDTH < 2)
                     boundaryTiles.Add(positionPrev);
             }
             
@@ -97,7 +99,7 @@ public class CorridorGenerator
             prevStep = step;
         }
 
-        BoundaryTiles = boundaryTiles;
+        BoundaryTiles.UnionWith(boundaryTiles);
         
         return tiles;
     }

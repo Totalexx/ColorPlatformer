@@ -6,8 +6,8 @@ namespace RougeBuilder.System.Impl;
 
 public class MapAreaGenerator
 {
-    public BinaryTree<Rectangle> AreaTree { get; private set; } 
-    
+    public BinaryTree<Rectangle> AreaTree { get; private set; }
+
     private const int MAP_TILES_WIDTH = 160;
     private const int MAP_TILES_HEIGHT = 160;
 

@@ -11,7 +11,7 @@ public class RoomGenerator
     private const int MIN_ROOM_S = 160;
     private const float ASPECT_RATIO_ROOM = 1.1f;
 
-    private readonly Random random = new ();
+    private readonly Random random = new (34);
     
     public Dictionary<Node<Rectangle>, Rectangle> Rooms { get; private set; }
     public HashSet<Vector2> BoundaryTiles { get; private set; }
@@ -29,6 +29,8 @@ public class RoomGenerator
     public Dictionary<Vector2, Tile> GenerateTiles()
     {
         var roomsTiles = new Dictionary<Vector2, Tile>();
+        BoundaryTiles = new HashSet<Vector2>();
+        
         foreach (var roomAndArea in Rooms)
             foreach (var tile in GenerateOneTileRoom(roomAndArea.Value))
                 roomsTiles[tile.Key] = tile.Value;
@@ -41,14 +43,14 @@ public class RoomGenerator
         var tiles = new Dictionary<Vector2, Tile>();
         var boundaryTiles = new HashSet<Vector2>();
         
-        var rightPosition = room.X + room.Width;
-        var bottomPosition = room.Y + room.Height;
+        var rightPosition = room.X + room.Width - 1;
+        var bottomPosition = room.Y + room.Height - 1;
         
-        for (var x = room.X; x < rightPosition; x++)
+        for (var x = room.X; x <= rightPosition; x++)
         {
-            for (var y = room.Y; y < bottomPosition; y++)
+            for (var y = room.Y; y <= bottomPosition; y++)
             {
-                var position = new Vector2(x, y) * MapTiles.TileSize;
+                var position = new Vector2(x, y);
                 tiles[position] = new Tile(position, MapTiles.Floor);
 
                 if (x == room.X || x == rightPosition || y == room.Y || y == bottomPosition)
@@ -56,7 +58,7 @@ public class RoomGenerator
             }
         }
 
-        BoundaryTiles = boundaryTiles;
+        BoundaryTiles.UnionWith(boundaryTiles);
         return tiles;
     }
     

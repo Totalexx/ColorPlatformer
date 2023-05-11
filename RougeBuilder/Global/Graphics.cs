@@ -55,7 +55,7 @@ public static class Graphics
         Camera = new OrthographicCamera(viewport)
         {
             Position = new Vector2(0, 0),
-            Zoom = 2f
+            Zoom = 1.5f
         };
     }
     

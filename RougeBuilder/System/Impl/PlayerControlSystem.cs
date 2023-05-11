@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RougeBuilder.Component.Impl;
-using RougeBuilder.Global;
 using RougeBuilder.Model;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;
 
@@ -9,7 +8,7 @@ namespace RougeBuilder.System.Impl;
 
 public class PlayerControlSystem : AbstractSystem<PlayerControllable>
 {
-    private float playerVelocity = 0.1f;
+    private float playerVelocity = 1f;
 
     protected override void UpdateEntity(AbstractEntity entity)
     {
