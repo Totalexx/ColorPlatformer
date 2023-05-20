@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
@@ -18,7 +19,8 @@ public class Player : AbstractEntity
             new Drawable(texture),
             new Movable(),
             new PlayerControllable(),
-            new CameraFollows()
+            new CameraFollows(),
+            // new Collider(new RectangleF());
         };
     }
 }

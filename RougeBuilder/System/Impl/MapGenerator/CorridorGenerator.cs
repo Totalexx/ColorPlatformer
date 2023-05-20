@@ -14,7 +14,7 @@ public class CorridorGenerator
     public LinkedList<LinkedList<Vector2>> Corridors { get; private set; }
     public HashSet<Vector2> BoundaryTiles { get; private set; }
 
-    private const int CORRIDOR_WIDTH = 3;
+    private const int CORRIDOR_WIDTH = 1;
     private const int HALF_CORRIDOR_WIDTH = CORRIDOR_WIDTH / 2;
 
     public void GenerateSimpleCorridors(IEnumerable<Rectangle> rooms)
@@ -80,16 +80,16 @@ public class CorridorGenerator
                     dx = -HALF_CORRIDOR_WIDTH + i;
 
                 var position = new Vector2(step.X + dx, step.Y + dy);
-                tiles[position] = new Tile(position, MapTiles.Floor);
+                tiles[position] = new Tile(position, MapTiles.Floor, false);
 
-                if (dx != 0 || dy != 0)
+                if (dx != 0 || dy != 0|| CORRIDOR_WIDTH < 3)
                     boundaryTiles.Add(position);
                 
                 if (!isSecond) continue;
                 var positionPrev = new Vector2(prevStep.X + dx, prevStep.Y + dy);
-                tiles[positionPrev] = new Tile(positionPrev, MapTiles.Floor);
+                tiles[positionPrev] = new Tile(positionPrev, MapTiles.Floor, false);
                 
-                if (dx != 0 || dy != 0 || CORRIDOR_WIDTH < 2)
+                if (dx != 0 || dy != 0 || CORRIDOR_WIDTH < 3)
                     boundaryTiles.Add(positionPrev);
             }
             

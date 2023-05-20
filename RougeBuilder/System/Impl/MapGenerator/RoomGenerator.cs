@@ -51,7 +51,7 @@ public class RoomGenerator
             for (var y = room.Y; y <= bottomPosition; y++)
             {
                 var position = new Vector2(x, y);
-                tiles[position] = new Tile(position, MapTiles.Floor);
+                tiles[position] = new Tile(position, MapTiles.Floor, false);
 
                 if (x == room.X || x == rightPosition || y == room.Y || y == bottomPosition)
                     boundaryTiles.Add(position);

@@ -40,7 +40,7 @@ public class WallGenerator
         {
             var floorAround = CheckFloorAround(wallPosition);
             var wallTexture = !wallPatterns.ContainsKey(floorAround) ? MapTiles.Error : wallPatterns[floorAround];
-            wallTiles[wallPosition] = new Tile(wallPosition, wallTexture);
+            wallTiles[wallPosition] = new Tile(wallPosition, wallTexture, true);
         }
 
         return wallTiles;
