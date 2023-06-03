@@ -14,7 +14,7 @@ public class CorridorGenerator
     public LinkedList<LinkedList<Vector2>> Corridors { get; private set; }
     public HashSet<Vector2> BoundaryTiles { get; private set; }
 
-    private const int CORRIDOR_WIDTH = 1;
+    private const int CORRIDOR_WIDTH = 3;
     private const int HALF_CORRIDOR_WIDTH = CORRIDOR_WIDTH / 2;
 
     public void GenerateSimpleCorridors(IEnumerable<Rectangle> rooms)
