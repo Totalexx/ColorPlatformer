@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using RougeBuilder.Component.Impl;
@@ -23,15 +24,15 @@ public class ShootSystem : AbstractSystem<PlayerControllable>
     protected override void UpdateEntity(AbstractEntity entity)
     {
         
-        var keyboardState = Keyboard.GetState();
+        var keyboardState = Keyboard.GetState(); 
 
         var shootReload = Time.GameTime.TotalGameTime.Subtract(lastShoot).TotalMilliseconds;
         if (!keyboardState.IsKeyDown(Keys.Space) || shootReload < 50) return;
         var positional = entity.GetComponent<Positional>().Position;
         var mousePosition = Mouse.GetState().Position.ToVector2();
-        Debug.WriteLine(mousePosition);
-        var bulletAngle = mousePosition - positional;
+        var bulletAngle = mousePosition - new Vector2( Graphics.GraphicsDevice.DisplayMode.Width / 2, Graphics.GraphicsDevice.DisplayMode.Height / 2);
         
+        Debug.WriteLine(bulletAngle);
         var bullet = new Bullet();
         bullet.GetComponent<Positional>().Position = positional;
         bullet.GetComponent<Movable>().Velocity = bulletAngle.NormalizedCopy() * 0.3f;
