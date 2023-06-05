@@ -23,7 +23,7 @@ public class Tile : AbstractEntity
         if (!isSolidTile) 
             return;
         
-        var colliderBounds = new RectangleF(positional.Position - MapTiles.TileSize / 2, MapTiles.TileSize);
+        var colliderBounds = new RectangleF(positional.Position, MapTiles.TileSize);
         AddComponent(new Collider(colliderBounds, Collider.EntityCollisionType.STATIC));
     }
     

@@ -8,7 +8,7 @@ namespace RougeBuilder.System.Impl;
 
 public class PlayerControlSystem : AbstractSystem<PlayerControllable>
 {
-    private float playerVelocity = 1f;
+    private float playerVelocity = 0.15f;
 
     protected override void UpdateEntity(AbstractEntity entity)
     {

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using RougeBuilder.Model;
-using RougeBuilder.Model.Impl;
 using RougeBuilder.Model.Impl.Map;
 using RougeBuilder.System.Impl;
 
@@ -8,15 +7,18 @@ namespace RougeBuilder.State;
 
 public class GameLoadingState : GameState
 {
-    private readonly MapGenerationSystem mapGenerationSystem = new ();
+    private MapGenerationSystem mapGenerationSystem;
     private readonly LinkedList<AbstractEntity> allEntities = new ();
+    public readonly List<AbstractEntity> toAdd = new ();
     private bool _isGameLoaded = false;
 
     protected override void Start()
     {
-        allEntities.AddLast(new Player());
+        mapGenerationSystem = new MapGenerationSystem(this);
         allEntities.AddLast(new Map());
         mapGenerationSystem.Update(allEntities);
+        foreach (var entity in toAdd)
+            allEntities.AddLast(entity);            
         _isGameLoaded = true;
     }
 

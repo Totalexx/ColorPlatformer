@@ -3,23 +3,23 @@ using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
+using RougeBuilder.Model;
+using NotImplementedException = System.NotImplementedException;
 
-namespace RougeBuilder.Model.Impl;
+namespace RougeBuilder.Entity.Impl;
 
-public class Player : AbstractEntity
+public class WinItem : AbstractEntity
 {
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("player");
-        
+        var texture = Graphics.Content.Load<Texture2D>("chest");
+
         return new AbstractComponent[]
         {
             new Positional(100, 100),
             new Drawable(texture),
-            new Movable(),
-            new PlayerControllable(),
-            new CameraFollows(),
-            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC)
+            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
+            new WinMarker()
         };
     }
 }

@@ -16,9 +16,9 @@ public abstract class AbstractSystem<ProcessedComponent> : ISystem where Process
         }
     }
 
-    protected abstract void UpdateEntity(AbstractEntity entity);
+    protected virtual void UpdateEntity(AbstractEntity entity) {}
     
-    private IEnumerable<AbstractEntity> GetProcessedEntities(IEnumerable<AbstractEntity> entities)
+    protected IEnumerable<AbstractEntity> GetProcessedEntities(IEnumerable<AbstractEntity> entities)
     {
         return entities == null 
             ? Enumerable.Empty<AbstractEntity>() 

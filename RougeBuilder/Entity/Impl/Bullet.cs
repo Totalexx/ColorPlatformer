@@ -4,22 +4,21 @@ using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
 
-namespace RougeBuilder.Model.Impl;
+namespace RougeBuilder.Model;
 
-public class Player : AbstractEntity
+public class Bullet : AbstractEntity
 {
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("player");
-        
+        var texture = Graphics.Content.Load<Texture2D>("bullet");
+
         return new AbstractComponent[]
         {
             new Positional(100, 100),
             new Drawable(texture),
             new Movable(),
-            new PlayerControllable(),
-            new CameraFollows(),
-            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC)
+            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
+            new DamageDealer()
         };
     }
 }

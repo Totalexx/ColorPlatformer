@@ -12,4 +12,17 @@ public abstract class AbstractComponent
     {
         return Owner.HasComponent<OtherComponent>();
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+            return false;
+
+        return GetHashCode() == obj.GetHashCode();
+    }
+
+    public override int GetHashCode()
+    {
+        return (Owner != null ? Owner.GetHashCode() : 0) + GetType().GetHashCode() * 37;
+    }
 }

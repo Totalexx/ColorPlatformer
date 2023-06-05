@@ -9,7 +9,7 @@ namespace RougeBuilder;
 public class RougeBuilder : Game
 {
     private GraphicsDeviceManager _graphics;
-    private GameState _gameState;
+    public GameState _gameState;
 
     private BoxingViewportAdapter viewportAdapter;
     

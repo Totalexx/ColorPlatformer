@@ -6,20 +6,24 @@ using RougeBuilder.Global;
 
 namespace RougeBuilder.Model.Impl;
 
-public class Player : AbstractEntity
+public class Enemy : AbstractEntity
 {
+    public Enemy(AbstractEntity target)
+    {
+        AddComponent(new MoveToTarget(target.GetComponent<Positional>()));
+    }
+
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("player");
+        var texture = Graphics.Content.Load<Texture2D>("enemy");
         
         return new AbstractComponent[]
         {
-            new Positional(100, 100),
+            new Positional(300, 400),
             new Drawable(texture),
             new Movable(),
-            new PlayerControllable(),
-            new CameraFollows(),
-            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC)
+            new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
+            new Health()
         };
     }
 }

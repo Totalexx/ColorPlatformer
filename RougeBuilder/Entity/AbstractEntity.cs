@@ -7,6 +7,8 @@ namespace RougeBuilder.Model;
 
 public abstract class AbstractEntity
 {
+    public readonly Guid id = Guid.NewGuid(); 
+    
     private readonly Dictionary<Type, AbstractComponent> _components = new();
 
     public T GetComponent<T>() where T : AbstractComponent
@@ -42,5 +44,23 @@ public abstract class AbstractEntity
     {
         foreach (var component in components)
             AddComponent(component);
+    }
+
+    protected bool Equals(AbstractEntity other)
+    {
+        return id.Equals(other.id);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != this.GetType()) return false;
+        return Equals((AbstractEntity)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return id.GetHashCode();
     }
 }
