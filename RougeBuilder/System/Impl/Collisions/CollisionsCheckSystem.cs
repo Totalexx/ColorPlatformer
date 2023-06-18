@@ -13,9 +13,12 @@ namespace RougeBuilder.System.Impl;
 
 public class CollisionsCheckSystem : AbstractSystem<Collider>
 {
-    private static Vector2 collisionBounds = new (MapAreaGenerator.MAP_TILES_WIDTH * MapTiles.TileSize.X,
+    private static Vector2 collisionSize = new (MapAreaGenerator.MAP_TILES_WIDTH * MapTiles.TileSize.X,
         MapAreaGenerator.MAP_TILES_HEIGHT * MapTiles.TileSize.Y);
-    private QuadTree quadTree = new (collisionBounds);
+
+    private static RectangleF collisionBounds = new(Vector2.Zero, collisionSize);
+    
+    private QuadTree quadTree = new (collisionSize);
     private Dictionary<RectangleF, Collider> entityByCollider = new ();
     private Dictionary<Collider, RectangleF> colliderByEntity = new ();
     private readonly HashSet<RectangleF> staticEntities = new ();
@@ -26,14 +29,22 @@ public class CollisionsCheckSystem : AbstractSystem<Collider>
     
     public override void Update(IEnumerable<AbstractEntity> entities)
     {
-        if(AddMapColliders(entities))
-            return;
-        UpdateQuadTree(entities);
+        quadTree = new QuadTree(collisionSize);
+        entityByCollider = new Dictionary<RectangleF, Collider>();
+        colliderByEntity = new Dictionary<Collider, RectangleF>();
+        
+        var abstractEntities = entities.ToList();
+        AddMapColliders(abstractEntities);
+        UpdateQuadTree(abstractEntities);
         UpdateCollisions();
 
         // foreach (var coll in colliderByEntity)
         // {
         //     Graphics.SpriteBatch.DrawRectangle(coll.Value, Color.Aqua);
+        // }
+        // foreach (var bound in quadTree.GetBounds())
+        // {
+        //     Graphics.SpriteBatch.DrawRectangle(bound, Color.Red);
         // }
     }
 
@@ -42,23 +53,17 @@ public class CollisionsCheckSystem : AbstractSystem<Collider>
         return collisions;
     }
     
-    private bool AddMapColliders(IEnumerable<AbstractEntity> entities)
+    private void AddMapColliders(IEnumerable<AbstractEntity> entities)
     {
-        if (!mapTilesNotAdded) return false;
-        
         var map = entities.Where(e => e.HasComponent<MapMarker>()).First();
         var walls = map.GetComponent<EntityCollector<Tile>>().Collection.Where(e => e.HasComponent<Collider>());
         foreach (var wall in walls)
         {
             var collider = wall.GetComponent<Collider>();
             quadTree.Add(collider.Bounds);
-            staticEntities.Add(collider.Bounds);
             entityByCollider[collider.Bounds] = collider;
             colliderByEntity[collider] = collider.Bounds;
         }
-
-        mapTilesNotAdded = false;
-        return true;
     }
     
     private void UpdateQuadTree(IEnumerable<AbstractEntity> entities)
@@ -66,35 +71,13 @@ public class CollisionsCheckSystem : AbstractSystem<Collider>
         foreach (var entity in GetProcessedEntities(entities))
         {
             var collider = entity.GetComponent<Collider>();
-            if (collider.CollisionType == Collider.EntityCollisionType.STATIC)
-            {
-                if (!staticEntities.Contains(collider.Bounds))
-                {
-                    quadTree.Add(collider.Bounds);
-                    staticEntities.Add(collider.Bounds);
-                    entityByCollider[collider.Bounds] = collider;
-                    colliderByEntity[collider] = collider.Bounds;
-                }
+            
+            if (!collisionBounds.Contains(collider.Bounds.TopLeft) || !collisionBounds.Contains(collider.Bounds.BottomRight))
                 continue;
-            }
-
-            var isPresentEntity = colliderByEntity.ContainsKey(collider);
-            if (isPresentEntity)
-            {
-                var previousCollider = colliderByEntity[collider];
-                if (collider.Bounds == previousCollider) continue;
-                quadTree.Remove(previousCollider);
-                quadTree.Add(collider.Bounds);
-                entityByCollider.Remove(previousCollider);
-                entityByCollider[collider.Bounds] = collider;
-                colliderByEntity[collider] = collider.Bounds;
-            }
-            else
-            {
-                quadTree.Add(collider.Bounds);
-                entityByCollider[collider.Bounds] = collider;
-                colliderByEntity[collider] = collider.Bounds;
-            }
+            
+            quadTree.Add(collider.Bounds);
+            entityByCollider[collider.Bounds] = collider;
+            colliderByEntity[collider] = collider.Bounds;
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Model;
 
@@ -9,7 +10,7 @@ public class PhysicsBoundsSystem : ISystem
 {
 
     private readonly CollisionsCheckSystem _collisionsCheckSystem;
-
+    private readonly Point2 Point2One = new (1, 1);
     public PhysicsBoundsSystem(CollisionsCheckSystem collisionsCheckSystem)
     {
         _collisionsCheckSystem = collisionsCheckSystem;
@@ -38,7 +39,7 @@ public class PhysicsBoundsSystem : ISystem
 
     private void newPosition(Collider dynamicEntity, Collider staticEntity)
     {
-        var dp = (staticEntity.Bounds.Center - dynamicEntity.Bounds.Center) * 0.012f;
+        var dp = Vector2.One / (staticEntity.Bounds.Center - dynamicEntity.Bounds.Center);
         dynamicEntity.Owner.GetComponent<Movable>().Velocity = dynamicEntity.Owner.GetComponent<Movable>().Velocity - dp;
     }
 }

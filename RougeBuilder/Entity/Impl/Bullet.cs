@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component;
@@ -18,7 +19,9 @@ public class Bullet : AbstractEntity
             new Drawable(texture),
             new Movable(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
-            new DamageDealer()
+            new DamageDealer(new HashSet<Type>{ typeof(PlayerControllable) }),
+            new BulletMarker(),
+            new Health(5)
         };
     }
 }

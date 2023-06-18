@@ -15,7 +15,7 @@ public class QuadTree : IEnumerable<RectangleF>
     public QuadTree(Vector2 bounds)
     {
         this.bounds = new RectangleF(Vector2.Zero, bounds);
-        Root = new QuadTreeNode(null, bounds / 2);
+        Root = new QuadTreeNode(null, bounds / 2, Vector2.Zero);
     }
 
     public void Add(RectangleF rectangle)
@@ -40,18 +40,21 @@ public class QuadTree : IEnumerable<RectangleF>
         private QuadTreeNode[] children = new QuadTreeNode[4];
         private readonly QuadTreeNode parent;
         private readonly Vector2 halfBounds;
+        private readonly Vector2 topLeft;
+        private static readonly Vector2 minSize = new (0.1f, 0.1f);
 
-        public QuadTreeNode(QuadTreeNode parent, Vector2 halfBounds)
+        public QuadTreeNode(QuadTreeNode parent, Vector2 halfBounds, Vector2 topLeft)
         {
             this.parent = parent;
             this.halfBounds = halfBounds;
+            this.topLeft = topLeft;
         }
 
         public void Add(RectangleF rectangle)
         {
             var value = new RectangleF(rectangle.Position, rectangle.Size);
             
-            if (values.Count < 4 && children[0] == null)
+            if (values.Count < 4 && children[0] == null || (halfBounds - topLeft).X < minSize.X)
                 values.Add(value);
             else
                 BalanceNode(value);
@@ -70,9 +73,14 @@ public class QuadTree : IEnumerable<RectangleF>
             }
 
             if (CanBeValueInChild(rectangle, out var child))
+            {
                 child.Remove(rectangle);
+                parent?.RemoveChildrenIfEmpty();
+            }
             else
+            {
                 values.Remove(rectangle);
+            }
         }
 
         public LinkedList<(RectangleF, RectangleF)> GetIntersections()
@@ -88,22 +96,25 @@ public class QuadTree : IEnumerable<RectangleF>
 
             if (children[0] == null)
             {
-                foreach (var intersection in CheckIntersections())
+                foreach (var intersection in CheckIntersections(values))
                     intersections.AddLast(intersection);
                 return intersections;
             }
 
+            if (values.Count != 0)
+                foreach (var value in CheckIntersectionsWithValues(values))
+                    intersections.AddLast(value);
+            
             for (var i = 0; i < 4; i++)
             {
                 foreach (var intersection in children[i].GetIntersectionReq())
                     intersections.AddLast(intersection);
-                
             }
 
             return intersections;
         }
 
-        private IEnumerable<(RectangleF, RectangleF)> CheckIntersections()
+        private IEnumerable<(RectangleF, RectangleF)> CheckIntersections(List<RectangleF> values)
         {
             for (var i = 0; i < values.Count - 1; i++)
                 for (var j = i + 1; j <  values.Count; j++)
@@ -111,13 +122,13 @@ public class QuadTree : IEnumerable<RectangleF>
                         yield return (values[i], values[j]);
         }
         
-        // private IEnumerable<(RectangleF, RectangleF)> CheckIntersectionsWithParentValues()
-        // {
-        //     foreach (var rectangle in values)
-        //     {
-        //         
-        //     }
-        // }
+        private IEnumerable<(RectangleF, RectangleF)> CheckIntersectionsWithValues(List<RectangleF> values)
+        {
+            foreach (var intersection in CheckIntersections(values))
+            {
+                yield return intersection;
+            }
+        }
 
         // private LinkedList<RectangleF> GetChildrenValues()
         // {
@@ -149,6 +160,15 @@ public class QuadTree : IEnumerable<RectangleF>
                 values.Add(rectangle);
         }
 
+        private void RemoveChildrenIfEmpty()
+        {
+            if (children.Any(child => child.children[0] != null))
+                return;
+
+            children = new QuadTreeNode[4];
+            parent?.RemoveChildrenIfEmpty();
+        }
+        
         private bool CanBeValueInChild(RectangleF rectangle, out QuadTreeNode child)
         {
             var childForTopLeft = GetChildByPoint(rectangle.TopLeft);
@@ -173,10 +193,12 @@ public class QuadTree : IEnumerable<RectangleF>
 
         private void CreateChildren()
         {
-            children[0] = new QuadTreeNode(this, halfBounds / 2);
-            children[1] = new QuadTreeNode(this, new Vector2(halfBounds.X * 1.5f, halfBounds.Y / 2));
-            children[2] = new QuadTreeNode(this, new Vector2(halfBounds.X / 2, halfBounds.Y  * 1.5f));
-            children[3] = new QuadTreeNode(this, halfBounds * 1.5f);
+            var quarterSize = (halfBounds - topLeft) / 2;
+            children[0] = new QuadTreeNode(this, halfBounds - quarterSize, topLeft);
+            
+            children[1] = new QuadTreeNode(this, new Vector2(halfBounds.X + quarterSize.X, quarterSize.Y), new Vector2(halfBounds.X, topLeft.Y));
+            children[2] = new QuadTreeNode(this, new Vector2(quarterSize.X, halfBounds.Y + quarterSize.Y), new Vector2(topLeft.X, halfBounds.Y));
+            children[3] = new QuadTreeNode(this, halfBounds + quarterSize, halfBounds);
         }
 
         public IEnumerator<RectangleF> GetEnumerator()
@@ -190,7 +212,27 @@ public class QuadTree : IEnumerable<RectangleF>
                     yield return value;
         }
 
+        public IEnumerable<RectangleF> GetBounds()
+        {
+            yield return new RectangleF(topLeft, (halfBounds - topLeft) * 2);
+            if (children[0] == null) yield break;
+            
+            
+            foreach (var child in children)
+            {
+                foreach (var childbound in child.GetBounds())
+                {
+                    yield return childbound;
+                }
+            }
+        }
+
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public IEnumerable<RectangleF> GetBounds()
+    {
+        return Root.GetBounds();
     }
 
     public IEnumerator<RectangleF> GetEnumerator()

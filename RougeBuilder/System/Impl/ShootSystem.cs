@@ -23,16 +23,17 @@ public class ShootSystem : AbstractSystem<PlayerControllable>
 
     protected override void UpdateEntity(AbstractEntity entity)
     {
-        
         var keyboardState = Keyboard.GetState(); 
 
         var shootReload = Time.GameTime.TotalGameTime.Subtract(lastShoot).TotalMilliseconds;
-        if (!keyboardState.IsKeyDown(Keys.Space) || shootReload < 50) return;
+        if (!keyboardState.IsKeyDown(Keys.Space) || shootReload < 200) 
+            return;
         var positional = entity.GetComponent<Positional>().Position;
         var mousePosition = Mouse.GetState().Position.ToVector2();
-        var bulletAngle = mousePosition - new Vector2( Graphics.GraphicsDevice.DisplayMode.Width / 2, Graphics.GraphicsDevice.DisplayMode.Height / 2);
+        var bulletAngle = mousePosition.Translate(-Graphics.GraphicsDevice.Viewport.Width / 2, -Graphics.GraphicsDevice.Viewport.Height / 2);
+
+        Debug.WriteLine(mousePosition);
         
-        Debug.WriteLine(bulletAngle);
         var bullet = new Bullet();
         bullet.GetComponent<Positional>().Position = positional;
         bullet.GetComponent<Movable>().Velocity = bulletAngle.NormalizedCopy() * 0.3f;

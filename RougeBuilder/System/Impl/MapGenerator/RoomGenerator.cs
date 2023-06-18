@@ -8,7 +8,7 @@ namespace RougeBuilder.System.Impl;
 
 public class RoomGenerator
 {
-    private const int MIN_ROOM_S = 32;//160;
+    private const int MIN_ROOM_S = 160;
     private const float ASPECT_RATIO_ROOM = 1.1f;
 
     private readonly Random random = new (34);

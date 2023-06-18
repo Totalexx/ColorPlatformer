@@ -45,7 +45,7 @@ public static class Graphics
 
     public static void DrawEnd()
     {
-        DrawFPS();
+        // DrawFPS();
         SpriteBatch.End();
     }
     

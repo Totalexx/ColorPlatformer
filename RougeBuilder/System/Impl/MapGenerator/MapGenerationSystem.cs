@@ -45,11 +45,16 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
     private void GenerateEnemies(Player player)
     {
         var random = new Random();
-        foreach (var room in roomGenerator.Rooms)
+        foreach (var room in roomGenerator.Rooms.Skip(1))
         {
-            var enemy = new Enemy(player);
-            enemy.GetComponent<Positional>().Position = room.Value.Center.ToVector2() * 16;
-            _gameLoadingState.toAdd.Add(enemy);
+            var countEnemies = random.Next(2, 5);
+            for (var i = 0; i < countEnemies; i++)
+            {
+                var enemy = new Enemy(player);
+                enemy.GetComponent<Positional>().Position = new Vector2(random.Next(room.Value.Left, room.Value.Right),
+                    random.Next(room.Value.Top, room.Value.Bottom)) * MapTiles.TileSize;
+                _gameLoadingState.toAdd.Add(enemy);
+            }
         }
     }
     

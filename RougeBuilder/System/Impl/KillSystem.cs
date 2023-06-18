@@ -7,7 +7,7 @@ namespace RougeBuilder.System.Impl;
 public class KillSystem : AbstractSystem<Health>
 {
 
-    private OnGameState _onGameState;
+    private readonly OnGameState _onGameState;
 
     public KillSystem(OnGameState onGameState)
     {
@@ -16,8 +16,10 @@ public class KillSystem : AbstractSystem<Health>
     
     protected override void UpdateEntity(AbstractEntity entity)
     {
-        if (entity.GetComponent<Health>().health < 0)
+        if (entity.GetComponent<Health>().HealthSize < 0)
         {
+            if (entity.HasComponent<PlayerControllable>())
+                _onGameState.playerIsDead = true;
             _onGameState.entitiesToRemove.Add(entity);
         } 
     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component;
@@ -23,7 +24,8 @@ public class Enemy : AbstractEntity
             new Drawable(texture),
             new Movable(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
-            new Health()
+            new Health(100),
+            new DamageDealer(new HashSet<Type>())
         };
     }
 }

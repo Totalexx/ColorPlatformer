@@ -4,6 +4,6 @@ public class RunGameState : GameState
 {
     public override GameState Update()
     {
-        return new GameLoadingState();
+        return new TutorialState();
     }
 }

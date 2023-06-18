@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Model;
 using RougeBuilder.System.Impl;
+using Enumerable = System.Linq.Enumerable;
 using NotImplementedException = System.NotImplementedException;
 
 namespace RougeBuilder.System;
@@ -27,11 +29,32 @@ public class DamageSystem : ISystem
                 || collision.Item2.Owner.HasComponent<DamageDealer>() && collision.Item1.Owner.HasComponent<Health>())
             {
                 var firstIsDamageDealer = collision.Item1.Owner.HasComponent<DamageDealer>();
+                var secondIsDamageDealer = collision.Item2.Owner.HasComponent<DamageDealer>();
+
+                if (firstIsDamageDealer && secondIsDamageDealer)
+                {
+                    TakeDamage(collision.Item1.Owner, collision.Item2.Owner);
+                    TakeDamage(collision.Item2.Owner, collision.Item1.Owner);
+                    continue;
+                }
+                
                 var damageDealer = firstIsDamageDealer ? collision.Item1.Owner : collision.Item2.Owner;
                 var damageTaker = firstIsDamageDealer ? collision.Item2.Owner : collision.Item1.Owner;
 
-                damageTaker.GetComponent<Health>().health -= damageDealer.GetComponent<DamageDealer>().damage;
+                TakeDamage(damageDealer, damageTaker);
             }
         }
+    }
+
+    private void TakeDamage(AbstractEntity damageDealer, AbstractEntity damageTaker)
+    {
+        var damageTakerComponents = damageTaker.GetAllComponents().Select(p => p.Key);
+        var goNext = damageTakerComponents.Any(component => damageDealer.GetComponent<DamageDealer>().IgnoreComponents.Contains(component));
+
+        if (goNext)
+            return;
+                
+        if (damageTaker.HasComponent<Health>())
+            damageTaker.GetComponent<Health>().HealthSize -= damageDealer.GetComponent<DamageDealer>().Damage;
     }
 }
