@@ -8,8 +8,9 @@ public class DamageDealer : AbstractComponent
     public int Damage = 30;
     public HashSet<Type> IgnoreComponents;
 
-    public DamageDealer(HashSet<Type> ignore)
+    public DamageDealer(int damage, HashSet<Type> ignore)
     {
+        Damage = damage;
         IgnoreComponents = ignore;
     }
 }

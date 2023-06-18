@@ -12,6 +12,7 @@ public static class MapTiles
     public static readonly Vector2 TileSize = new (16, 16);
 
     public static readonly Texture2D Floor = Graphics.Content.Load<Texture2D>("map/floor");
+    public static readonly Texture2D FloorWithCrack = Graphics.Content.Load<Texture2D>("map/floor2");
     public static readonly Texture2D WallBottomLeft = Graphics.Content.Load<Texture2D>("map/wall-bottom-left");
     public static readonly Texture2D WallBottomRight = Graphics.Content.Load<Texture2D>("map/wall-bottom-right");
     public static readonly Texture2D WallLeft = Graphics.Content.Load<Texture2D>("map/wall-left");

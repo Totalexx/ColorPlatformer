@@ -4,24 +4,22 @@ using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
+using RougeBuilder.Model;
 
-namespace RougeBuilder.Model;
+namespace RougeBuilder.Entity.Impl;
 
-public class Bullet : AbstractEntity
+public class ChestKey : AbstractEntity
 {
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("bullet");
+        var texture = Graphics.Content.Load<Texture2D>("key");
 
         return new AbstractComponent[]
         {
             new Positional(-1, -1),
             new Drawable(texture),
-            new Movable(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
-            new DamageDealer(30, new HashSet<Type>{ typeof(PlayerControllable), typeof(MissileMarker) }),
-            new MissileMarker(),
-            new Health(5)
+            new KeyMarker()
         };
     }
 }

@@ -16,7 +16,7 @@ public class Enemy : AbstractEntity
 
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("enemy");
+        var texture = Graphics.Content.Load<Texture2D>("enemy" + new Random().Next(1, 3));
         
         return new AbstractComponent[]
         {
@@ -25,7 +25,8 @@ public class Enemy : AbstractEntity
             new Movable(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
             new Health(100),
-            new DamageDealer(new HashSet<Type>())
+            new EnemyMarker(),
+            new DamageDealer(30, new HashSet<Type>{typeof(EnemyMarker)})
         };
     }
 }

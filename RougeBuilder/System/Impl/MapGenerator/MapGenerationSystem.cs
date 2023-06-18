@@ -47,7 +47,7 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
         var random = new Random();
         foreach (var room in roomGenerator.Rooms.Skip(1))
         {
-            var countEnemies = random.Next(2, 5);
+            var countEnemies = random.Next(5, 10);
             for (var i = 0; i < countEnemies; i++)
             {
                 var enemy = new Enemy(player);
@@ -68,9 +68,15 @@ public class MapGenerationSystem : AbstractSystem<MapMarker>
     
     private void GenerateWin()
     {
-        var win = new WinItem();
+        var key = new ChestKey();
+        var random = new Random();
+        key.GetComponent<Positional>().Position =
+            roomGenerator.Rooms.Skip(random.Next(3, 5)).First().Value.Center.ToVector2() * 16;
+        
+        var win = new WinChest();
         win.GetComponent<Positional>().Position = roomGenerator.Rooms.Last().Value.Center.ToVector2() * 16;
         _gameLoadingState.toAdd.Add(win);
+        _gameLoadingState.toAdd.Add(key);
     }
     
     private void SetMapTiles(Dictionary<Vector2, Tile> tiles)

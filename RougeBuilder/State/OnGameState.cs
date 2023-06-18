@@ -13,8 +13,8 @@ namespace RougeBuilder.State;
 public class OnGameState : GameState
 {
     private readonly LinkedList<AbstractEntity> allEntities;
-    public List<AbstractEntity> entitiesToAdd;
-    public List<AbstractEntity> entitiesToRemove;
+    public List<AbstractEntity> entitiesToAdd = new ();
+    public List<AbstractEntity> entitiesToRemove = new ();
     
     private List<ISystem> gameSystems = new();
 
@@ -34,8 +34,8 @@ public class OnGameState : GameState
 
     public override GameState Update()
     {
-        entitiesToAdd = new List<AbstractEntity>();
-        entitiesToRemove = new List<AbstractEntity>();
+        entitiesToAdd.Clear();
+        entitiesToRemove.Clear();
         
         foreach (var system in gameSystems)
             system.Update(allEntities);
@@ -68,18 +68,20 @@ public class OnGameState : GameState
         
         gameSystems = new List<ISystem>
         {
-            new PlayerControlSystem(),
+            new PlayerControlSystem(entitiesToAdd),
             new ShootSystem(this),
             new CameraFollowSystem(),
             new MoveToTargetSystem(),
             new MapDrawSystem(),
             new DrawSystem(),
+            new DrawInventorySystem(),
             collisionCheckSystem,
             new PhysicsBoundsSystem(collisionCheckSystem),
             new DamageSystem(collisionCheckSystem),
             new CheckWinSystem(collisionCheckSystem, this),
             new MoveSystem(),
-            new KillSystem(this)
+            new KillSystem(this),
+            new AddCoinsByKillSystem(entitiesToRemove)
         };
     }
 }

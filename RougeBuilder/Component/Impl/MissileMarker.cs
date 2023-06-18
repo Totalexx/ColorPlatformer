@@ -1,6 +1,6 @@
 namespace RougeBuilder.Component.Impl;
 
-public class BulletMarker : AbstractComponent
+public class MissileMarker : AbstractComponent
 {
     
 }

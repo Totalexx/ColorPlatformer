@@ -8,10 +8,10 @@ public class MapAreaGenerator
 {
     public BinaryTree<Rectangle> AreaTree { get; private set; }
 
-    public const int MAP_TILES_WIDTH = 160;
-    public const int MAP_TILES_HEIGHT = 160;
+    public const int MAP_TILES_WIDTH = 80;
+    public const int MAP_TILES_HEIGHT = 80;
 
-    private const int MIN_AREA_S = 2048;
+    private const int MIN_AREA_S = 1024;
     private const float ASPECT_RATIO_AREA = 0.40f;
 
     private readonly Random random = new ();

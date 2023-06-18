@@ -1,27 +1,25 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
 using RougeBuilder.Global;
+using RougeBuilder.Model;
+using NotImplementedException = System.NotImplementedException;
 
-namespace RougeBuilder.Model;
+namespace RougeBuilder.Entity.Impl;
 
-public class Bullet : AbstractEntity
+public class WinChest : AbstractEntity
 {
     protected override IEnumerable<AbstractComponent> InitializeComponents()
     {
-        var texture = Graphics.Content.Load<Texture2D>("bullet");
+        var texture = Graphics.Content.Load<Texture2D>("closedChest");
 
         return new AbstractComponent[]
         {
-            new Positional(-1, -1),
+            new Positional(),
             new Drawable(texture),
-            new Movable(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC),
-            new DamageDealer(30, new HashSet<Type>{ typeof(PlayerControllable), typeof(MissileMarker) }),
-            new MissileMarker(),
-            new Health(5)
+            new WinMarker()
         };
     }
 }

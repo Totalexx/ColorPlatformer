@@ -5,7 +5,7 @@ using RougeBuilder.Model;
 
 namespace RougeBuilder.System;
 
-public abstract class AbstractSystem<ProcessedComponent> : ISystem where ProcessedComponent : AbstractComponent
+public abstract class AbstractSystem<ProcessedComponent> : ISystem where ProcessedComponent : AbstractComponent 
 {
     public virtual void Update(IEnumerable<AbstractEntity> entities)
     {

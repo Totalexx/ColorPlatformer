@@ -20,6 +20,7 @@ public class Player : AbstractEntity
             new PlayerControllable(),
             new CameraFollows(),
             new Health(50),
+            new Inventory(),
             new Collider(texture.Bounds, Collider.EntityCollisionType.DYNAMIC)
         };
     }

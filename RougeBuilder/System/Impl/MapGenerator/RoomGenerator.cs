@@ -8,10 +8,10 @@ namespace RougeBuilder.System.Impl;
 
 public class RoomGenerator
 {
-    private const int MIN_ROOM_S = 160;
+    private const int MIN_ROOM_S = 120;
     private const float ASPECT_RATIO_ROOM = 1.1f;
 
-    private readonly Random random = new (34);
+    private readonly Random random = new ();
     
     public Dictionary<Node<Rectangle>, Rectangle> Rooms { get; private set; }
     public HashSet<Vector2> BoundaryTiles { get; private set; }
@@ -51,7 +51,8 @@ public class RoomGenerator
             for (var y = room.Y; y <= bottomPosition; y++)
             {
                 var position = new Vector2(x, y);
-                tiles[position] = new Tile(position, MapTiles.Floor, false);
+                var texture = random.Next(0, 5) == 0 ? MapTiles.FloorWithCrack : MapTiles.Floor;
+                tiles[position] = new Tile(position, texture, false);
 
                 if (x == room.X || x == rightPosition || y == room.Y || y == bottomPosition)
                     boundaryTiles.Add(position);
