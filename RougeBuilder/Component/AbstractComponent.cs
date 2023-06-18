@@ -1,3 +1,4 @@
+using RougeBuilder.Entity;
 using RougeBuilder.Model;
 
 namespace RougeBuilder.Component;

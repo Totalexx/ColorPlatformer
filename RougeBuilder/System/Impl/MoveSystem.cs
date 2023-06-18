@@ -1,5 +1,6 @@
 using System.Numerics;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Global;
 using RougeBuilder.Model;
 

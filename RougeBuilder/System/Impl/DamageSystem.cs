@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Model;
 using RougeBuilder.System.Impl;
 

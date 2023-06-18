@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using MonoGame.Extended;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Global;
 using RougeBuilder.Model;
 

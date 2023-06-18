@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Entity.Impl;
 using RougeBuilder.Model;
 using RougeBuilder.Model.Impl;

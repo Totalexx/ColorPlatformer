@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Global;
 using RougeBuilder.Model;
 using RougeBuilder.State;

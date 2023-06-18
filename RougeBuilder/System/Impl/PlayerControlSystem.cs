@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.Entity.Impl;
 using RougeBuilder.Model;
 using Keyboard = Microsoft.Xna.Framework.Input.Keyboard;

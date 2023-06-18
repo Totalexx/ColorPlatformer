@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 
 namespace RougeBuilder.Model.Impl.Map;
 

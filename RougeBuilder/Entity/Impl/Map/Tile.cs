@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using RougeBuilder.Component;
 using RougeBuilder.Component.Impl;
+using RougeBuilder.Entity;
 using RougeBuilder.System.Impl;
 
 namespace RougeBuilder.Model.Impl.Map;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RougeBuilder.Component;
+using RougeBuilder.Entity;
 using RougeBuilder.Model;
 
 namespace RougeBuilder.System;

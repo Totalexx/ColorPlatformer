@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using RougeBuilder.Component;
 
-namespace RougeBuilder.Model;
+namespace RougeBuilder.Entity;
 
 public abstract class AbstractEntity
 {

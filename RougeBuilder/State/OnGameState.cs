@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using RougeBuilder.Entity;
 using RougeBuilder.Global;
 using RougeBuilder.Model;
 using RougeBuilder.System;

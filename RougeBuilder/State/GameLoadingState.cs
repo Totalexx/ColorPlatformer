@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RougeBuilder.Entity;
 using RougeBuilder.Model;
 using RougeBuilder.Model.Impl.Map;
 using RougeBuilder.System.Impl;
